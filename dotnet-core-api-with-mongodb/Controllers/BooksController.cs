@@ -2,6 +2,7 @@
 using dotnet_core_api_with_mongodb.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace dotnet_core_api_with_mongodb.Controllers
 {
@@ -17,19 +18,12 @@ namespace dotnet_core_api_with_mongodb.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Book>> Get() => _bookService.Get();
+        public async Task<List<Book>> Get() => await Task.Run(_bookService.Get);
 
         [HttpGet("{id:length(24)}", Name = "GetBook")]
-        public ActionResult<Book> Get(string id)
+        public async Task<Book> Get(string id)
         {
-            var book = _bookService.Get(id);
-
-            if (book == null)
-            {
-                return NotFound();
-            }
-
-            return book;
+            return await Task.Run(() => _bookService.Get(id));
         }
 
         [HttpPost]
