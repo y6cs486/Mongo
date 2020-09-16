@@ -28,6 +28,14 @@ namespace dotnet_core_api_with_mongodb
                 sp.GetRequiredService<IOptions<BookstoreDatabaseSettings>>().Value);
             services.AddSingleton<BookService>();
             services.AddControllers().AddNewtonsoftJson(options => options.UseMemberCasing());
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = "Book Store API",
+                    Version = "v1"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +55,11 @@ namespace dotnet_core_api_with_mongodb
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book Store API");
             });
         }
     }
